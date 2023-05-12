@@ -1,0 +1,47 @@
+.news-display {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: lightgray;
+}
+
+.left-section {
+    display: flex;
+}
+
+.right-section {
+    display: flex;
+}
+
+.news-container {
+    margin-top: 20px;
+}
+
+.news-item {
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.search-form {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.search-form input {
+    margin-right: 10px;
+}
+
+.search-form button {
+    padding: 5px 10px;
+}
+
+.active {
+    background-color: lightblue;
+}
