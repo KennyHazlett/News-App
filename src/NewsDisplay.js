@@ -2,13 +2,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import NewsContext from './NewsContext';
 import { fetchTopHeadlines, searchNews } from './newsAPI';
 import './NewsDisplay.css';
+import Button from '@mui/material/Button';
 
 const NewsDisplay = () => {
-  const { newsItems, updateNewsItems, selectedCountry } = useContext(NewsContext);
+  const {
+    updateNewsItems,
+    selectedCountry,
+    updateSelectedCountry,
+    updateSearchFilter,
+    filteredNewsItems,
+  } = useContext(NewsContext);
   const [toggle, setToggle] = useState('Top News');
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isRequesting, setIsRequesting] = useState(false);
+  const [newsWithImages, setNewsWithImages] = useState([]);
+  const [newsWithoutImages, setNewsWithoutImages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,10 +25,10 @@ const NewsDisplay = () => {
         setIsRequesting(true);
 
         if (toggle === 'Top News') {
-          const articles = await fetchTopHeadlines(selectedCountry === 'gb' ? 'gb' : 'us');
+          const articles = await fetchTopHeadlines(selectedCountry);
           updateNewsItems(articles);
         } else if (toggle === 'Search') {
-          const articles = await searchNews(selectedCountry === 'gb' ? 'gb' : 'us', debouncedSearchTerm);
+          const articles = await searchNews(selectedCountry, debouncedSearchTerm);
           updateNewsItems(articles);
         }
       } catch (error) {
@@ -42,10 +51,20 @@ const NewsDisplay = () => {
     };
   }, [searchTerm]);
 
+  useEffect(() => {
+    // Separate articles with and without images
+    const articlesWithImages = filteredNewsItems.filter((newsItem) => newsItem.urlToImage);
+    const articlesWithoutImages = filteredNewsItems.filter((newsItem) => !newsItem.urlToImage);
+
+    setNewsWithImages(articlesWithImages);
+    setNewsWithoutImages(articlesWithoutImages);
+  }, [filteredNewsItems]);
+
   const handleToggle = (option) => {
     if (!isRequesting) {
       setToggle(option);
       setSearchTerm('');
+      updateSearchFilter('');
     }
   };
 
@@ -53,6 +72,7 @@ const NewsDisplay = () => {
     e.preventDefault();
     if (!isRequesting) {
       setToggle('Search');
+      updateSearchFilter(searchTerm);
     }
   };
 
@@ -60,55 +80,68 @@ const NewsDisplay = () => {
     <div className="news-display">
       <div className="header">
         <div className="left-section">
-          <button
-            className={toggle === 'Top News' ? 'active' : ''}
+          <Button
+            variant={toggle === 'Top News' ? 'contained' : 'text'}
             onClick={() => handleToggle('Top News')}
           >
             Top News
-          </button>
-          <button
-            className={toggle === 'Categories' ? 'active' : ''}
+          </Button>
+          <Button
+            variant={toggle === 'Categories' ? 'contained' : 'text'}
             onClick={() => handleToggle('Categories')}
           >
             Categories
-          </button>
-          <button
-            className={toggle === 'Search' ? 'active' : ''}
+          </Button>
+          <Button
+            variant={toggle === 'Search' ? 'contained' : 'text'}
             onClick={() => handleToggle('Search')}
           >
             Search
-          </button>
+          </Button>
         </div>
         <div className="right-section">
-          <button
-            className={`${
-              selectedCountry === 'gb' ? 'active' : ''
-            }`}
-            onClick={() => updateNewsItems('gb')}
+          <Button
+            variant={selectedCountry === 'gb' ? 'contained' : 'text'}
+            onClick={() => updateSelectedCountry('gb')}
           >
             GB
-          </button>
-          <button
-            className={`${
-              selectedCountry === 'us' ? 'active' : ''
-            }`}
-            onClick={() => updateNewsItems('us')}
+          </Button>
+          <Button
+            variant={selectedCountry === 'us' ? 'contained' : 'text'}
+            onClick={() => updateSelectedCountry('us')}
           >
             US
-          </button>
-          </div>
+          </Button>
+        </div>
       </div>
       <div className="news-container">
-        {toggle === 'Top News' &&
-          newsItems.map((newsItem) => (
-            <div className="news-item" key={newsItem.id}>
-              <h3>{newsItem.title}</h3>
-              <p>{newsItem.description}</p>
-              <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
-                More <span>&gt;</span>
-              </a>
+        {toggle === 'Top News' && (
+          <div className="news-row">
+            <div className="news-column">
+              {newsWithImages.map((newsItem) => (
+                <div className="news-item" key={newsItem.url}>
+                  <h3>{newsItem.title}</h3>
+                  <img src={newsItem.urlToImage} alt={newsItem.title} className="news-item-image" />
+                  <p>{newsItem.description}</p>
+                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                    More <span>&gt;</span>
+                  </a>
+                </div>
+              ))}
             </div>
-          ))}
+            <div className="news-column">
+              {newsWithoutImages.map((newsItem) => (
+                <div className="news-item" key={newsItem.url}>
+                  <h3>{newsItem.title}</h3>
+                  <p>{newsItem.description}</p>
+                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                    More <span>&gt;</span>
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {toggle === 'Search' && (
           <>
             <form onSubmit={handleSearch} className="search-form">
@@ -120,15 +153,20 @@ const NewsDisplay = () => {
               />
               <button type="submit">Search</button>
             </form>
-            {newsItems.slice(0, 2).map((newsItem) => (
-              <div className="news-item" key={newsItem.id}>
-                                <h3>{newsItem.title}</h3>
-                <p>{newsItem.description}</p>
-                <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
-                  More <span>&gt;</span>
-                </a>
-              </div>
-            ))}
+            <div className="news-row">
+              {filteredNewsItems.slice(0, 6).map((newsItem) => (
+                <div className="news-item" key={newsItem.url}>
+                  <h3>{newsItem.title}</h3>
+                  {newsItem.urlToImage && (
+                    <img src={newsItem.urlToImage} alt={newsItem.title} />
+                  )}
+                  <p>{newsItem.description}</p>
+                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                    More <span>&gt;</span>
+                  </a>
+                </div>
+              ))}
+            </div>
           </>
         )}
       </div>
@@ -137,4 +175,3 @@ const NewsDisplay = () => {
 };
 
 export default NewsDisplay;
-

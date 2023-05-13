@@ -32,6 +32,7 @@
 .search-form {
     display: flex;
     margin-bottom: 10px;
+    justify-content: center;
 }
 
 .search-form input {
@@ -44,4 +45,34 @@
 
 .active {
     background-color: lightblue;
+}
+
+.news-row {
+    display: flex;
+    justify-content: center;
+}
+
+.news-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.news-item {
+    width: 45%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.news-item-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1500px) {
+    .news-item {
+        width: 90%;
+    }
 }
