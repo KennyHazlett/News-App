@@ -65,10 +65,22 @@
     border-radius: 5px;
 }
 
+.news-item a {
+    text-align: right;
+    display: block;
+    margin-top: 10px;
+}
+
 .news-item-image {
     width: 100%;
     height: auto;
     margin-bottom: 10px;
+}
+
+.news-item-more {
+    text-align: right;
+    display: block;
+    margin-top: 10px;
 }
 
 @media (max-width: 1500px) {

@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { fetchTopHeadlines, searchNews } from './newsAPI';
+import { createContext, useState, useEffect } from 'react';
+import { fetchTopHeadlines } from './newsAPI';
 
 const NewsContext = createContext();
 
@@ -36,11 +36,12 @@ export const NewsProvider = ({ children }) => {
     const filterNewsItems = () => {
       const filteredItems = newsItems.filter(
         (item) =>
-          item.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchFilter.toLowerCase())
+          (item.title && item.title.toLowerCase().includes(searchFilter.toLowerCase())) ||
+          (item.description && item.description.toLowerCase().includes(searchFilter.toLowerCase()))
       );
       setFilteredNewsItems(filteredItems);
     };
+
 
     filterNewsItems();
   }, [newsItems, searchFilter]);
@@ -53,16 +54,6 @@ export const NewsProvider = ({ children }) => {
     setSearchFilter(filter);
   };
 
-  const searchArticles = async (country, query) => {
-    try {
-      const articles = await searchNews(country, query);
-      setNewsItems(articles);
-    } catch (error) {
-      console.log(error);
-      setNewsItems([]);
-    }
-  };
-
   const contextValue = {
     newsItems,
     selectedCountry,
@@ -70,7 +61,6 @@ export const NewsProvider = ({ children }) => {
     updateSelectedCountry,
     updateSearchFilter,
     filteredNewsItems,
-    searchArticles
   };
 
   return (

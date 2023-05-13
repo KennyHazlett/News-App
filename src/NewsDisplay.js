@@ -4,6 +4,16 @@ import { fetchTopHeadlines, searchNews } from './newsAPI';
 import './NewsDisplay.css';
 import Button from '@mui/material/Button';
 
+const categories = [
+  'business',
+  'entertainment',
+  'general',
+  'health',
+  'science',
+  'sports',
+  'technology',
+];
+
 const NewsDisplay = () => {
   const {
     updateNewsItems,
@@ -14,10 +24,10 @@ const NewsDisplay = () => {
   } = useContext(NewsContext);
   const [toggle, setToggle] = useState('Top News');
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isRequesting, setIsRequesting] = useState(false);
   const [newsWithImages, setNewsWithImages] = useState([]);
   const [newsWithoutImages, setNewsWithoutImages] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +37,13 @@ const NewsDisplay = () => {
         if (toggle === 'Top News') {
           const articles = await fetchTopHeadlines(selectedCountry);
           updateNewsItems(articles);
+          updateSearchFilter('');
         } else if (toggle === 'Search') {
-          const articles = await searchNews(selectedCountry, debouncedSearchTerm);
+          const articles = await searchNews(selectedCountry, searchTerm);
+          updateNewsItems(articles);
+          updateSearchFilter(searchTerm);
+        } else if (toggle === 'Categories' && selectedCategory) {
+          const articles = await fetchTopHeadlines(selectedCountry, selectedCategory);
           updateNewsItems(articles);
         }
       } catch (error) {
@@ -39,17 +54,8 @@ const NewsDisplay = () => {
     };
 
     fetchData();
-  }, [toggle, selectedCountry, debouncedSearchTerm, updateNewsItems]);
+  }, [toggle, selectedCountry, searchTerm, selectedCategory, updateNewsItems, updateSearchFilter]);
 
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500); // Delay the execution by 500 milliseconds
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [searchTerm]);
 
   useEffect(() => {
     // Separate articles with and without images
@@ -75,6 +81,25 @@ const NewsDisplay = () => {
       updateSearchFilter(searchTerm);
     }
   };
+
+  const handleCategorySelection = async (category) => {
+    setSelectedCategory(category);
+    setToggle('Categories');
+    setSearchTerm('');
+    updateSearchFilter('');
+
+    try {
+      setIsRequesting(true);
+      const articles = await fetchTopHeadlines(selectedCountry, category);
+      updateNewsItems(articles);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsRequesting(false);
+    }
+  };
+
+
 
   return (
     <div className="news-display">
@@ -123,7 +148,7 @@ const NewsDisplay = () => {
                   <h3>{newsItem.title}</h3>
                   <img src={newsItem.urlToImage} alt={newsItem.title} className="news-item-image" />
                   <p>{newsItem.description}</p>
-                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="news-item-more">
                     More <span>&gt;</span>
                   </a>
                 </div>
@@ -154,18 +179,69 @@ const NewsDisplay = () => {
               <button type="submit">Search</button>
             </form>
             <div className="news-row">
-              {filteredNewsItems.slice(0, 6).map((newsItem) => (
-                <div className="news-item" key={newsItem.url}>
-                  <h3>{newsItem.title}</h3>
-                  {newsItem.urlToImage && (
-                    <img src={newsItem.urlToImage} alt={newsItem.title} />
-                  )}
-                  <p>{newsItem.description}</p>
-                  <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
-                    More <span>&gt;</span>
-                  </a>
-                </div>
+              <div className="news-column">
+                {newsWithImages.map((newsItem) => (
+                  <div className="news-item" key={newsItem.url}>
+                    <h3>{newsItem.title}</h3>
+                    <img src={newsItem.urlToImage} alt={newsItem.title} className="news-item-image" />
+                    <p>{newsItem.description}</p>
+                    <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="news-item-more">
+                      More <span>&gt;</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <div className="news-column">
+                {newsWithoutImages.map((newsItem) => (
+                  <div className="news-item" key={newsItem.url}>
+                    <h3>{newsItem.title}</h3>
+                    <p>{newsItem.description}</p>
+                    <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                      More <span>&gt;</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+        {toggle === 'Categories' && (
+          <>
+            <div className="categories-container">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? 'contained' : 'text'}
+                  onClick={() => handleCategorySelection(category)}
+                >
+                  {category}
+                </Button>
               ))}
+            </div>
+            <div className="news-row">
+              <div className="news-column">
+                {newsWithImages.map((newsItem) => (
+                  <div className="news-item" key={newsItem.url}>
+                    <h3>{newsItem.title}</h3>
+                    <img src={newsItem.urlToImage} alt={newsItem.title} className="news-item-image" />
+                    <p>{newsItem.description}</p>
+                    <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="news-item-more">
+                      More <span>&gt;</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <div className="news-column">
+                {newsWithoutImages.map((newsItem) => (
+                  <div className="news-item" key={newsItem.url}>
+                    <h3>{newsItem.title}</h3>
+                    <p>{newsItem.description}</p>
+                    <a href={newsItem.url} target="_blank" rel="noopener noreferrer">
+                      More <span>&gt;</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         )}
@@ -175,3 +251,5 @@ const NewsDisplay = () => {
 };
 
 export default NewsDisplay;
+
+
