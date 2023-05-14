@@ -54,6 +54,10 @@ export const NewsProvider = ({ children }) => {
     setSearchFilter(filter);
   };
 
+  const updateNewsItems = (articles) => {
+    setNewsItems(articles);
+  };
+
   const contextValue = {
     newsItems,
     selectedCountry,
@@ -61,6 +65,7 @@ export const NewsProvider = ({ children }) => {
     updateSelectedCountry,
     updateSearchFilter,
     filteredNewsItems,
+    updateNewsItems,
   };
 
   return (

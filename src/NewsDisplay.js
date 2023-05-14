@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import NewsContext from './NewsContext';
 import { fetchTopHeadlines, searchNews } from './newsAPI';
 import './NewsDisplay.css';
@@ -29,8 +29,8 @@ const NewsDisplay = () => {
   const [newsWithoutImages, setNewsWithoutImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (category) => {
       try {
         setIsRequesting(true);
 
@@ -42,19 +42,34 @@ const NewsDisplay = () => {
           const articles = await searchNews(selectedCountry, searchTerm);
           updateNewsItems(articles);
           updateSearchFilter(searchTerm);
-        } else if (toggle === 'Categories' && selectedCategory) {
-          const articles = await fetchTopHeadlines(selectedCountry, selectedCategory);
+        } else if (toggle === 'Categories' && (selectedCategory || category)) {
+          const articles = await fetchTopHeadlines(
+            selectedCountry,
+            category || selectedCategory
+          );
           updateNewsItems(articles);
+          updateSearchFilter('');
         }
       } catch (error) {
         console.log(error);
       } finally {
         setIsRequesting(false);
       }
-    };
+    },
+    [selectedCountry, searchTerm, selectedCategory, toggle, updateNewsItems, updateSearchFilter]
+  );
 
-    fetchData();
-  }, [toggle, selectedCountry, searchTerm, selectedCategory, updateNewsItems, updateSearchFilter]);
+
+
+
+
+
+  useEffect(() => {
+    if (toggle === 'Categories') {
+      fetchData();
+    }
+  }, [fetchData, selectedCategory, toggle]);
+
 
 
   useEffect(() => {
@@ -82,22 +97,19 @@ const NewsDisplay = () => {
     }
   };
 
-  const handleCategorySelection = async (category) => {
+  const handleCategorySelection = (category) => {
     setSelectedCategory(category);
     setToggle('Categories');
     setSearchTerm('');
     updateSearchFilter('');
-
-    try {
-      setIsRequesting(true);
-      const articles = await fetchTopHeadlines(selectedCountry, category);
-      updateNewsItems(articles);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsRequesting(false);
-    }
+    fetchData(category); // Add this line
   };
+
+
+
+
+
+
 
 
 

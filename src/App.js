@@ -1,15 +1,17 @@
 import React from 'react';
 import { NewsProvider } from './NewsContext';
 import NewsDisplay from './NewsDisplay';
-
+import ErrorBoundary from './ErrorBoundary';
 
 const App = () => {
   return (
-    <NewsProvider>
-      <div className="App">
-        <NewsDisplay />
-      </div>
-    </NewsProvider>
+    <div className="App">
+      <ErrorBoundary>
+        <NewsProvider>
+          <NewsDisplay />
+        </NewsProvider>
+      </ErrorBoundary>
+    </div>
   );
 };
 

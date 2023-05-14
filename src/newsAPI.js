@@ -22,6 +22,7 @@ const fetchTopHeadlines = async (country, category) => {
   }
 };
 
+
 const searchNews = async (country, query) => {
   try {
     const url = new URL('https://newsapi.org/v2/everything');
