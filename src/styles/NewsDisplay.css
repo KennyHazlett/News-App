@@ -1,0 +1,99 @@
+/* The .news-display class styles the container of the entire news display */
+.news-display {
+    display: flex;
+    flex-direction: column;
+}
+
+/* The .header class styles the header section that contains the navigation buttons */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: lightgray;
+}
+
+/* The .left-section class styles the left part of the header containing Top News, Categories, and Search buttons */
+.left-section {
+    display: flex;
+}
+
+/* The .right-section class styles the right part of the header containing the GB and US buttons */
+.right-section {
+    display: flex;
+}
+
+/* The .news-item class styles each individual news item */
+.news-item {
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* The .search-form class styles the form used for searching news */
+.search-form {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
+/* The .search-form input class styles the search input field */
+.search-form input {
+    margin-right: 10px;
+}
+
+/* The .search-form button class styles the search button */
+.search-form button {
+    padding: 5px 10px;
+}
+
+/* The .active class styles the active navigation button */
+.active {
+    background-color: lightblue;
+}
+
+/* The .news-row class styles the container for news items displayed in a row */
+.news-row {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+/* The .news-column class styles the container for news items displayed in a column */
+.news-column {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* The .news-item a class styles the anchor tag within a news item */
+.news-item a {
+    text-align: right;
+    display: block;
+    margin-top: 10px;
+}
+
+/* The .news-item-image class styles the image within a news item */
+.news-item-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* The .news-item-more class styles the "More" text link within a news item */
+.news-item-more {
+    text-align: right;
+    display: block;
+    margin-top: 10px;
+}
+
+/* Media query that applies styles for screens with a maximum width of 100% */
+@media (max-width: 100%) {
+
+    /* Styles for the .news-item class within the media query */
+    .news-item {
+        width: 100%;
+    }
+}

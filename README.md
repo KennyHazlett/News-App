@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# News API SPA
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a Single Page Application (SPA) created to display and browse the top news of the News API endpoint. It was built using React and demonstrates basic software engineering and architectural principles.
 
-## Available Scripts
+## Goal
 
-In the project directory, you can run:
+The goal of this assignment is to create a SPA to display and browse the top news of the News API endpoint, allowing users to switch between countries, view top news items, and filter the news through a search functionality.
 
-### `npm start`
+## Functionality
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The news application provides the following features:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Switch between countries (e.g. US and UK) to display top news items.
+- Display an overview of the top news items and access their detail pages.
+- Filter news articles using a search bar to find articles containing specific keywords.
 
-### `npm test`
+## Technologies Used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React
+- Axios
+- CSS
 
-### `npm run build`
+## Project Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `src/App.js`: Main layout and structure of the application.
+- `src/components`: Components for displaying news items and other UI elements.
+- `src/styles`: CSS files for customizing the application's appearance.
+- `src/utils`: Utility functions for interacting with the News API.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository
+git clone https://github.com/KennyHazlett/News-App.git
 
-### `npm run eject`
+2. Navigate to the project directory
+cd News-App
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install dependencies
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Obtain a News API key from [https://newsapi.org/](https://newsapi.org/) and add it to the `.env` file: REACT_APP_NEWS_API_KEY=your_api_key_here
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. Run the application in development mode
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser. The page will reload when you make changes.
 
-## Learn More
+## Build
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To build the app for production, run: npm run build
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This command will generate a `build` folder containing the optimized production build.
 
-### Code Splitting
+## Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To run tests for the application, execute the following command: npm test
