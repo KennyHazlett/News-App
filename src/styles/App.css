@@ -1,0 +1,60 @@
+/* The .App selector styles the container element with class "App" */
+.App {
+  text-align: center;
+  /* Centers the text within the container */
+}
+
+/* The .App-logo selector styles the logo element within the container */
+.App-logo {
+  height: 40vmin;
+  /* Sets the height of the logo relative to the viewport */
+  pointer-events: none;
+  /* Disables any pointer events on the logo */
+}
+
+/* The @media rule applies styles when the user's preference is not set to reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    /* Applies an infinite rotation animation to the logo with a duration of 20 seconds and a linear easing function */
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* The .App-header selector styles the header element within the container */
+.App-header {
+  background-color: #282c34;
+  /* Sets the background color of the header */
+  min-height: 100vh;
+  /* Ensures the header takes up at least the full height of the viewport */
+  display: flex;
+  /* Sets the display property to flex for the header */
+  flex-direction: column;
+  /* Arranges the header's child elements in a column */
+  align-items: center;
+  /* Centers the child elements horizontally */
+  justify-content: center;
+  /* Centers the child elements vertically */
+  font-size: calc(10px + 2vmin);
+  /* Sets the font size with a calculation based on the viewport size */
+  color: white;
+  /* Sets the text color within the header */
+}
+
+/* The .App-link selector styles the link element within the container */
+.App-link {
+  color: #61dafb;
+  /* Sets the color of the link */
+}
+
+/* The @keyframes rule defines the animation for the spinning logo */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+    /* Specifies the starting state of the animation (rotation at 0 degrees) */
+  }
+
+  to {
+    transform: rotate(360deg);
+    /* Specifies the ending state of the animation (rotation at 360 degrees) */
+  }
+}
