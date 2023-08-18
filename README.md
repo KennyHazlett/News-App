@@ -54,3 +54,6 @@ This command will generate a `build` folder containing the optimized production 
 ## Testing
 
 To run tests for the application, execute the following command: npm test
+
+## Demo
+![demo video](/GIF/News-App.gif) 
